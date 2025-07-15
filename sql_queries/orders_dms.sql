@@ -39,15 +39,15 @@ SELECT
         WHEN 8 THEN 'Returned to sender'
         WHEN 9 THEN 'Returned to another address'
         WHEN 10 THEN 'Scheduled'
-    END AS status,
-    CASE o.payment_mode
-        WHEN 1 THEN 'Cash on Pickup'
-        WHEN 2 THEN 'Online'
-        WHEN 3 THEN 'Cash on Delivery'
-        WHEN 5 THEN 'Credit'
-        WHEN 6 THEN 'Wallet'
-        ELSE 'Unknown'
-    END AS payment_mode,
+    END AS status
+    -- CASE o.payment_mode
+    --     WHEN 1 THEN 'Cash on Pickup'
+    --     WHEN 2 THEN 'Online'
+    --     WHEN 3 THEN 'Cash on Delivery'
+    --     WHEN 5 THEN 'Credit'
+    --     WHEN 6 THEN 'Wallet'
+    --     ELSE 'Unknown'
+    -- END AS payment_mode
 FROM orders_order o
 LEFT JOIN orders_regions rg ON o.region_id = rg.id
 LEFT JOIN orders_zone z ON o.zone_id = z.id

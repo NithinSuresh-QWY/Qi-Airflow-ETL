@@ -1,7 +1,7 @@
 import sys, os, json
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from datetime import datetime
+from datetime import datetime,timezone
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -12,7 +12,9 @@ from etl_main.load_config import load_config
 config = load_config()
 
 # Hardcoded fetch date for now (can also be dynamic if needed)
-fetch_until_date = "2025-06-30 23:59:59"
+# fetch_until_date = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+# change this for production use
+fetch_until_date = '2025-07-13 23:59:59'  
 
 default_args = {
     'start_date': datetime(2025, 1, 1),

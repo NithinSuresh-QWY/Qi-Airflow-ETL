@@ -21,7 +21,7 @@ SELECT
         WHEN vehicle_category = 3 THEN '4-wheeler'
         ELSE CAST(vehicle_category AS VARCHAR)
     END AS vehicle_category,    
-    vehicle_category,
+    -- vehicle_category,
     updated_by,
     alternate_phone,
     blood_group,

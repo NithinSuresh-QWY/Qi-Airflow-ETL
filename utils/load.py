@@ -5,6 +5,8 @@ import pandas as pd
 from psycopg2.extras import execute_values
 from airflow.hooks.base import BaseHook
 import numpy as np
+import json
+
 
 def insert_into_target(target_conn_id, target_table, df, unique_key):
     if not isinstance(df, pd.DataFrame):
@@ -73,15 +75,6 @@ def insert_into_target(target_conn_id, target_table, df, unique_key):
                 placeholders = ', '.join(['%s'] * len(columns))
                 insert_query = f"INSERT INTO {target_table} ({columns_sql}) VALUES %s"
 
-                def convert_value(val):
-                    if pd.isna(val):
-                        return None
-                    elif isinstance(val, np.integer):
-                        return int(val)  # Convert numpy.int64 to Python int
-                    elif isinstance(val, np.floating):
-                        return float(val)  # Convert numpy.float64 to Python float
-                    return val
-
                 values = [tuple(convert_value(val) for val in row) for row in df.itertuples(index=False)]
 
                 execute_values(cursor, insert_query, values, page_size=1000)
@@ -97,3 +90,19 @@ def insert_into_target(target_conn_id, target_table, df, unique_key):
         elif len(df) > 0:
             print(f"First row for reference: {df.iloc[0].to_dict()}")
         raise
+
+
+
+
+def convert_value(val):
+    if isinstance(val, (list, dict)):
+        return json.dumps(val)
+    
+    if pd.isna(val):
+        return None
+    elif isinstance(val, np.integer):
+        return int(val)
+    elif isinstance(val, np.floating):
+        return float(val)
+    
+    return val    
